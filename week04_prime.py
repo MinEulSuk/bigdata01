@@ -8,13 +8,10 @@ def is_prime(number):
     """
 
     if number >= 2:
-        # for i in range(2,number):
-        i = 2
-        while i * i <= number:
+        for i in range(2,number):
             if number % i == 0:
                 return False
             # print(i, end=" ")
-            i += 1
     else:
         return False
     return True
