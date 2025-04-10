@@ -10,10 +10,6 @@ for j in range(len(drinks)):
     menu_text += f'{j + 1}) {drinks[j]} {prices[j]}원 '
 menu_text += f'{len(drinks) + 1}) 주문 종료 : '
 while True:
-    # menu = input(f"1) {drinks[0]} {prices[0]}원 "
-    #              f"2) {drinks[1]} {prices[1]}원 "
-    #              f"3){drinks[2]} {prices[2]}원 "
-    #              f"4) 주문 종료 : ")
     menu = input(menu_text)
     if menu == "1":
         print(f"{drinks[0]}를 주문하셨습니다. 가격은 {prices[0]}원 입니다.")
@@ -39,6 +35,7 @@ while True:
 #print(f'{order_list}')
 print("상품명 단가 수량 금액")
 for i in range(len(drinks)):
-    print(f"{drinks[i]} {prices[i]} {amounts[i]} {prices[i] * amounts[i]}")
+    if amounts[i]>0:
+        print(f"{drinks[i]} {prices[i]} {amounts[i]} {prices[i] * amounts[i]}")
 print(f'총 금액은 {total_price}원')
 
