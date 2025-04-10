@@ -2,10 +2,10 @@ prices = [2000,2500,4000,4200]
 drinks = ['아이스 아메리카노','카페 라떼','수박 주스','딸기 주스']
 # prices = [2000]
 # drinks = ['아이스 아메리카']
-amounts = list()
-for _ in range(len(drinks)):
-    amounts.append(0)
-
+# amounts = list()
+# for _ in range(len(drinks)):
+#     amounts.append(0)
+amounts = [0 for _ in range(len(drinks))] # list comprehension
 
 total_price = 0
 
