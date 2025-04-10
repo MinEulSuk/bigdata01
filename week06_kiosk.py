@@ -17,11 +17,12 @@ def order_process(idx):
     total_price += prices[idx]
     amounts[idx] += 1
 
-menu_text = ""
-for j in range(len(drinks)):
-    menu_text += f'{j + 1}) {drinks[j]} {prices[j]}원 '
+# menu_text = ""
+# for j in range(len(drinks)):
+#     menu_text += f'{j + 1}) {drinks[j]} {prices[j]}원 '
+# menu_text += f'{len(drinks) + 1}) 주문 종료 : '
+menu_text = "".join([f'{j + 1}) {drinks[j]} {prices[j]}원 'for j in range(len(drinks))])
 menu_text += f'{len(drinks) + 1}) 주문 종료 : '
-
 while True:
     menu = int(input(menu_text))
     if 1 <= menu <= len(drinks):
