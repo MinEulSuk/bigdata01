@@ -7,7 +7,8 @@ amounts = [0] * len(drinks)
 
 total_price = 0
 
-def order_process(idx):
+def order_process(idx: int) -> None:
+    # : int -> (리턴타입)None 로 타입힌트를 줄 수 있음 주석같은 의미
     """
     주문 처리 함수 1) 주문 디스플레이 기능 2)총 주문 금액 누산 3) 수량 업데이트
     :param idx : 고객이 선택한 메뉴 -1
@@ -20,7 +21,7 @@ def order_process(idx):
 
 
 
-def display_menu():
+def display_menu() -> str:
     """
     음료 선택 메뉴 디스플레이 기능
     :return: 음료 메뉴 및 주문 종료 문자열
@@ -31,7 +32,7 @@ def display_menu():
 
     return menu_text
 
-def print_receipt():
+def print_receipt() -> None:
     """
     영수증 출력 기능
     :return: 없음
