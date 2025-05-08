@@ -48,11 +48,22 @@ def print_receipt() -> None:
     영수증 출력 기능
     :return: 없음
     """
+
     print(f"{'상품명':^20} {'단가': ^6} {'수량': ^6} {'금액': ^6}")
     for i in range(len(drinks)):
         if amounts[i] > 0:
             print(f"{drinks[i] : ^20} {prices[i] : ^6} {amounts[i] : ^6} {prices[i] * amounts[i] : ^6}")
-    print(f'총 금액은 {total_price}원')
+
+    discounted_price = apply_discount(total_price)
+    discount = total_price - discounted_price
+
+
+
+    if discount > 0:
+        print(f'할인 금액 : {discount}원\n할인 적용 후 지불하실 총 금액 : {discounted_price}원 입니다.')
+    else:
+        print(f'할인이 적용되지 않았습니다.\n지불하실 총 금액은 {total_price}원 입니다.')
+
 
 def test() -> None:
     """
