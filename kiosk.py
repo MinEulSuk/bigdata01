@@ -20,6 +20,23 @@ def apply_discount(price : int) -> float:
         return price * (1-DISCOUNT_RATE)
     return price
 
+def get_ticket_number() -> int:
+    """
+    주문 번호표 처리 기능 함수
+    :return: 번호
+    """
+    try:
+        with open("ticket.txt","r") as fp:
+            number = int(fp.read())
+    except FileNotFoundError:
+        number = 0
+    number += 1
+
+    with open("ticket.txt", "w") as fp:
+        fp.write(str(number))
+
+    return number
+
 def order_process(idx: int) -> None:
     # : int -> (리턴타입)None 로 타입힌트를 줄 수 있음 주석같은 의미
     """
@@ -63,7 +80,6 @@ def print_receipt() -> None:
         print(f'할인 금액 : {discount}원\n할인 적용 후 지불하실 총 금액 : {discounted_price}원 입니다.')
     else:
         print(f'할인이 적용되지 않았습니다.\n지불하실 총 금액은 {total_price}원 입니다.')
-
 
 def test() -> None:
     """
