@@ -5,7 +5,7 @@ total_price = 0
 
 #할인 적용 정책
 DISCOUNT_THRESHOLD = 10000 # 할인이 적용되는 임계값
-DISCOUNT_RATE = 0.1 #할인율
+DISCOUNT_RATE = 0.05 #할인율
 
 def run() -> None:
     """
@@ -26,9 +26,6 @@ def run() -> None:
                 print(f'{menu}번 메뉴는 존재하지 않습니다. 아래 메뉴에서 골라주세요.')
         except ValueError:
             print(f"문자를 입력할 수 없습니다.. 숫자를 입력해주세요.")
-
-
-
 
 def apply_discount(price : int) -> float:
     """
@@ -98,7 +95,8 @@ def print_receipt() -> None:
 
 
     if discount > 0:
-        print(f'할인 금액 : {discount}원\n할인 적용 후 지불하실 총 금액 : {discounted_price}원 입니다.')
+        print(f'할인 금액 : {discount}원 ({DISCOUNT_RATE*100}% 할인)\n'
+              f'할인 적용 후 지불하실 총 금액 : {discounted_price}원 입니다.')
     else:
         print(f'할인이 적용되지 않았습니다.\n지불하실 총 금액은 {total_price}원 입니다.')
 
