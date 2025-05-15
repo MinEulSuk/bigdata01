@@ -1,4 +1,4 @@
-import datetime
+import datetime,sqlite3
 prices = [2000,2500,4000,4200]
 drinks = ['아이스 아메리카노','카페 라떼','수박 주스','딸기 주스']
 amounts = [0] * len(drinks)
@@ -44,17 +44,26 @@ def print_ticket_number() -> None:
     주문 번호표 출력 기능 함수
     :return: None
     """
-    try:
-        with open("ticket.txt","r") as fp:
-            number = int(fp.read())
-    except FileNotFoundError:
-        number = 0
-    number += 1
+    conn = sqlite3.connect('cafe.db')  # db instance open
+    cur = conn.cursor()
 
-    with open("ticket.txt", "w") as fp:
-        fp.write(str(number))
+    cur.execute('''
+        create table if not exists ticket (
+        id integer primary key autoincrement,
+        number integer not null)
+    ''')
 
+    cur.execute('select number from ticket order by number desc limit 1')
+    result = cur.fetchone()
+    if result is None:
+        number = 1
+        cur.execute('insert into ticket (number) values (?)', (number,))
+    else:
+        number = result[0]+1
+        cur.execute('insert into ticket (number) values (?)', (number,))
+    conn.commit()  # 확정하는 것
     print(f'번호표 : {number}')
+    conn.close()  # free db instance 인스턴스 해제
 
 def order_process(idx: int) -> None:
     # : int -> (리턴타입)None 로 타입힌트를 줄 수 있음 주석같은 의미
@@ -101,6 +110,7 @@ def print_receipt() -> None:
     else:
         print(f'할인이 적용되지 않았습니다.\n지불하실 총 금액은 {total_price}원 입니다.')
     print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
 def test() -> None:
     """
     앞으로 키오스크에 추가할 기능
