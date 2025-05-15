@@ -53,18 +53,18 @@ def print_ticket_number() -> None:
         number integer not null)
     ''')
 
-    cur.execute('select number from ticket order by number desc limit 1')
+    cur.execute('select number from ticket')
     result = cur.fetchone()
     if result is None:
         number = 1
         cur.execute('insert into ticket (number) values (?)', (number,))
     else:
         number = result[0]+1
-        cur.execute('insert into ticket (number) values (?)', (number,))
+        cur.execute('update ticket set number = number + 1')
     conn.commit()  # 확정하는 것
     print(f'번호표 : {number}')
     conn.close()  # free db instance 인스턴스 해제
-
+    # datetime을 db에 넣는 방식으로 해결하는 거 ,
 def order_process(idx: int) -> None:
     # : int -> (리턴타입)None 로 타입힌트를 줄 수 있음 주석같은 의미
     """
