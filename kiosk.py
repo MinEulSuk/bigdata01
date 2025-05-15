@@ -8,6 +8,19 @@ total_price = 0
 DISCOUNT_THRESHOLD = 10000 # 할인이 적용되는 임계값
 DISCOUNT_RATE = 0.05 #할인율
 
+#cafe.db에 menu 테이블 insert
+conn = sqlite3.connect('cafe.db')
+cur = conn.cursor()
+cur.execute('''
+    create table if not exists menu (
+    id integer primary key autoincrement,
+    drinks string unique,
+    prices integer not null)
+''')
+cur.executemany('insert or ignore into menu(drinks,prices) values(?,?)', zip(drinks, prices))
+conn.commit()
+# run함수랑 연동해서 amounts양 늘려보기
+
 def run() -> None:
     """
     키오스크 실행(구동)함수
@@ -15,6 +28,7 @@ def run() -> None:
 
     :return: None
     """
+
     while True:
         try:
             menu = int(input(display_menu()))
@@ -44,27 +58,27 @@ def print_ticket_number() -> None:
     주문 번호표 출력 기능 함수
     :return: None
     """
-    conn = sqlite3.connect('cafe.db')  # db instance open
-    cur = conn.cursor()
 
     cur.execute('''
         create table if not exists ticket (
         id integer primary key autoincrement,
-        number integer not null)
+        number integer not null,
+        ordertime string)
     ''')
 
-    cur.execute('select number from ticket')
+    cur.execute('select number from ticket order by number desc')
     result = cur.fetchone()
     if result is None:
         number = 1
-        cur.execute('insert into ticket (number) values (?)', (number,))
     else:
         number = result[0]+1
-        cur.execute('update ticket set number = number + 1')
+    current_time = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 시간 변수 생성
+    cur.execute('insert into ticket(number,ordertime) values(?,?)',(number,current_time))
     conn.commit()  # 확정하는 것
-    print(f'번호표 : {number}')
+    print(f'번호표 : {number} {current_time}')
     conn.close()  # free db instance 인스턴스 해제
     # datetime을 db에 넣는 방식으로 해결하는 거 ,
+
 def order_process(idx: int) -> None:
     # : int -> (리턴타입)None 로 타입힌트를 줄 수 있음 주석같은 의미
     """
@@ -109,7 +123,7 @@ def print_receipt() -> None:
               f'할인 적용 후 지불하실 총 금액 : {discounted_price}원 입니다.')
     else:
         print(f'할인이 적용되지 않았습니다.\n지불하실 총 금액은 {total_price}원 입니다.')
-    print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
+
 
 def test() -> None:
     """
