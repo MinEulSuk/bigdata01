@@ -15,9 +15,11 @@ cur.execute('''
     create table if not exists menu (
     id integer primary key autoincrement,
     drinks string unique,
-    prices integer not null)
+    prices integer not null,
+    amounts integer)
 ''')
 cur.executemany('insert or ignore into menu(drinks,prices) values(?,?)', zip(drinks, prices))
+#unique or ignore은 sqlite3에만 있는 방법
 conn.commit()
 # run함수랑 연동해서 amounts양 늘려보기
 
@@ -77,7 +79,7 @@ def print_ticket_number() -> None:
     conn.commit()  # 확정하는 것
     print(f'번호표 : {number} {current_time}')
     conn.close()  # free db instance 인스턴스 해제
-    # datetime을 db에 넣는 방식으로 해결하는 거 ,
+    # datetime을 db에 넣는 방식으로 해결하는 거 , 브랜치를 활용해서 교수님 버전, db 버전으로 나누기
 
 def order_process(idx: int) -> None:
     # : int -> (리턴타입)None 로 타입힌트를 줄 수 있음 주석같은 의미
