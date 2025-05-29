@@ -1,5 +1,4 @@
-from datetime import datetime
-import sqlite3
+import datetime,sqlite3
 prices = [2000,2500,4000,4200]
 drinks = ['아이스 아메리카노','카페 라떼','수박 주스','딸기 주스']
 amounts = [0] * len(drinks)
@@ -51,21 +50,19 @@ def print_ticket_number() -> None:
     cur.execute('''
         create table if not exists ticket (
         id integer primary key autoincrement,
-        number integer not null,
-        created_at text not null default (datetime('now','localtime')))
+        number integer not null)
     ''')
 
-    cur.execute('select number from ticket order by number desc')
+    cur.execute('select number from ticket')
     result = cur.fetchone()
-    now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")  # 시간 변수 생성
     if result is None:
         number = 1
-        cur.execute('insert into ticket(number,created_at) values(?,?)', (number,now))
+        cur.execute('insert into ticket (number) values (?)', (number,))
     else:
         number = result[0]+1
-        cur.execute('insert into ticket(number,created_at) values(?,?)', (number, now))
+        cur.execute('update ticket set number = number + 1')
     conn.commit()  # 확정하는 것
-    print(f'번호표 : {number} {now}')
+    print(f'번호표 : {number}')
     conn.close()  # free db instance 인스턴스 해제
     # datetime을 db에 넣는 방식으로 해결하는 거 ,
 def order_process(idx: int) -> None:
@@ -112,6 +109,7 @@ def print_receipt() -> None:
               f'할인 적용 후 지불하실 총 금액 : {discounted_price}원 입니다.')
     else:
         print(f'할인이 적용되지 않았습니다.\n지불하실 총 금액은 {total_price}원 입니다.')
+    print(f'{datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}')
 
 def test() -> None:
     """
